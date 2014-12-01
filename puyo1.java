@@ -86,6 +86,10 @@ public class puyo1
 	{
 		int i,x,y;
 		final int puyoSize = 32;
+		boolean firstPlacing = true;
+		boolean gameIsOver = false;
+		int fallCount = 0;
+
 
 		myframe =  new Frame();
 		myframe.setLayout(null); // does not use layout manager
@@ -93,7 +97,7 @@ public class puyo1
 		myframe.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				myframe.dispose();
-				System.exit(0);
+				gameIsOver = true;
 			}
 			});
 		myframe.setVisible(true); // make the window visible
@@ -179,10 +183,6 @@ public class puyo1
 				rightBtnMouseReleased(e);
 				}
 				} );
-
-		boolean firstPlacing = true;
-		boolean gameIsOver = false;
-		int fallCount = 0;
 
 		
 		while( gameIsOver != true) 
