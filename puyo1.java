@@ -33,8 +33,7 @@ class YPanel extends XPanel
 	}
 	public void setBackground(Color color) 
 	{
-		super.setBackground(color);
-		bgcolor = color;
+		super.setBackground(color); bgcolor = color;
 	}
 }
 
@@ -247,8 +246,7 @@ class puyo1
 				{
 					// GAME OVER
 					setpuyo(puyoX,puyoY,color1);
-					setpuyo(puyoX2,puyoY2,color2);
-					System.out.print("batan kyu-\n");
+					setpuyo(puyoX2,puyoY2,color2); System.out.print("batan kyu-\n");
 					gameIsOver = true;
 				}
 			}
