@@ -68,6 +68,7 @@ class puyo1
 	static JPanel mypanels[][];
 	static int puyomatrix[][];
 	static Color colorList[];
+	static boolean dropFlag;
 	static int score = 0;
 	static int puyoX = 3, puyoY = 1;
 	static int puyoX2 = 3, puyoY2 = 2;
@@ -158,6 +159,7 @@ class puyo1
 		}
 
 		myframe.setVisible(true); // make the window visible
+		myframe.requestFocus();
 
 		rotateBtn.addMouseListener(new MouseAdapter() 
 				{
@@ -181,6 +183,40 @@ class puyo1
 				}
 				} );
 
+		KeyListener listener = new KeyListener() {
+
+		@Override
+
+		public void keyPressed(KeyEvent event) {
+
+		    if (event.getKeyCode() == KeyEvent.VK_UP) rotate();
+
+		    else if (event.getKeyCode() == KeyEvent.VK_LEFT) moveLeft();
+
+		    else if (event.getKeyCode() == KeyEvent.VK_RIGHT) moveRight();
+
+		    else if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = true;
+
+		}
+
+		@Override
+
+		public void keyReleased(KeyEvent event) {
+
+		    if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = false;
+
+		}
+
+		@Override
+
+		public void keyTyped(KeyEvent event) {
+
+		}
+
+		  };
+
+		myframe.addKeyListener(listener);
+
 		boolean firstPlacing = true;
 		boolean gameIsOver = false;
 		int fallCount = 0;
@@ -189,15 +225,16 @@ class puyo1
 		while( gameIsOver != true) 
 		{//{{{
 			lock = false;
-			sleep(100);
+			if (dropFlag) sleep(10);
+			else sleep(100);
 			lock = true;
 			while( lock2 ) 
 			{ sleep(10); }
 			if( firstPlacing ) 
 			{
 				firstPlacing = false;
-				color1=nextColor[0];
-				color2=nextColor[1];
+				color1 = nextColor[0];
+				color2 = nextColor[1];
 				rotate = 0;
 				puyoX = 3; puyoY = 1; // initialPlace
 				puyoX2 = getRotatedPositionX(puyoX,rotate);
@@ -272,6 +309,7 @@ class puyo1
 			}
 		}//}}}
 	}
+	
 	public static void rotateBtnMouseReleased(MouseEvent e) 
 	{
 		rotate();
@@ -338,6 +376,7 @@ class puyo1
 		}
 		return ry;
 	}
+
 	static boolean rotate() 
 	{
 		int nx,ny,nr;
