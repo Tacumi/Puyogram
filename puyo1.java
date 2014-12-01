@@ -65,6 +65,7 @@ class XPanel extends JPanel
 class puyo1 
 {
 	static JFrame myframe;
+	static JLabel scoreLabel;
 	static JPanel mypanels[][];
 	static int puyomatrix[][];
 	static Color colorList[];
@@ -116,7 +117,8 @@ class puyo1
 				JPanel p = new YPanel();
 				mypanels[y][x] = p;
 				myframe.add(p);
-				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); setpuyo(x,y,0); // no puyo is here
+				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
+				setpuyo(x,y,0); // no puyo is here
 			}
 		}
 		for( x = 0; x < 8; x++ ) 
@@ -140,6 +142,23 @@ class puyo1
 						puyoSize);
 			nextpanel[y].setBackground(colorList[nextColor[y]]);
 		}
+
+		JPanel panel = new JPanel();
+		panel.setBounds(40,470,600,40);
+
+		scoreLabel = new JLabel();
+		scoreLabel.setBounds(0, 0, 200, 40);
+		scoreLabel.setText("Score: 0");
+
+		panel.add(scoreLabel);
+
+		scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		scoreLabel.setVisible(true);
+
+		myframe.add(panel);
 
 		myframe.setVisible(true); // make the window visible
 		myframe.requestFocus();
@@ -273,7 +292,11 @@ class puyo1
 
 					score+=tempscore*rensa;
 
-					System.out.println("Score: " + score);
+					// System.out.println("Score: " + score);
+
+					scoreLabel.setText("Score: " + score);
+
+					scoreLabel.repaint();
 
 					rensa = 0;
 
