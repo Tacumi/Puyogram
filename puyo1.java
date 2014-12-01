@@ -69,6 +69,7 @@ class puyo1
 	static int puyomatrix[][];
 	static Color colorList[];
 	static boolean dropFlag;
+	static int rensa = 0;
 	static int score = 0;
 	static int puyoX = 3, puyoY = 1;
 	static int puyoX2 = 3, puyoY2 = 2;
@@ -298,9 +299,15 @@ class puyo1
 					// !!--check here--!!
 					while( areConnectedPuyosCleared() ) 
 					{
-					   fallPuyos();
+						rensa++;
+					   	fallPuyos();
 						sleep(300);
 					}
+
+					if (rensa > 1) System.out.println("Rensa: " + rensa);
+
+					rensa = 0;
+
 					// !!--check here--!!
 				}
 			} else 
