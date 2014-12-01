@@ -80,6 +80,8 @@ class puyo1
 	boolean firstPlacing = true;
 	boolean gameIsOver = false;
 	int fallCount = 0;
+	boolean dropFlag = false;
+	int rensa;
 
 	JPanel nextpanel[];
 	int nextColor1,nextColor2;
