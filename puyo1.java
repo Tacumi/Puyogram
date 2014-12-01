@@ -70,11 +70,10 @@ class puyo1
 	int puyomatrix[][];
 	Color colorList[];
 	boolean dropFlag;
-	final int puyoSize = 32;
 	int rensa = 0;
 	long score = 0;
 	int tempscore = 0;
-	int fallencount = 0;
+	int rensacount = 0;
 	int level = 1;
 	int puyoX = 3, puyoY = 1;
 	int puyoX2 = 3, puyoY2 = 2;
@@ -82,13 +81,13 @@ class puyo1
 	int rotate = 0;
 	boolean lock = false;
 	boolean lock2 = false;
-
 	JPanel nextpanel[];
 	int nextColor[];
 
 	public static void main(String args[]) 
 	{
 		int i,x,y;
+		final int puyoSize = 32;
 
 		myframe =  new JFrame();
 		myframe.setLayout(null); // does not use layout manager
@@ -203,12 +202,16 @@ class puyo1
 		boolean gameIsOver = false;
 		int fallCount = 0;
 
+		System.out.println("Till next level: " + (level*(level+1)*5));
+
 		
 		while( gameIsOver != true) 
 		{//{{{
 			lock = false;
 			if (dropFlag) sleep(10);
-			else sleep(100);
+			else if (level<7) sleep(58 - level*8);
+			else sleep(8);
+			
 			lock = true;
 			while( lock2 ) 
 			{ sleep(10); }
@@ -299,6 +302,8 @@ class puyo1
 
 					score+=tempscore*rensa;
 
+					rensacount+=rensa;
+
 					// System.out.println("Score: " + score);
 
 					scoreLabel.setText("Score: " + score);
@@ -315,6 +320,24 @@ class puyo1
 			} else 
 			{
 				fallCount++;
+			}
+			if (rensacount>(level*5)) {
+				
+				level++;
+
+				for ( int m = 1; m < 12 ; m++ ) {
+				 	for ( int n = 1; n < 7; n++ ) {
+				 		setpuyonorepaint(n,m,0);
+				 	}
+				}
+
+				myframe.repaint();
+
+				System.out.println("Level " + level);
+				System.out.println("Till next level: " + (level*5));
+				
+				sleep(2000);
+
 			}
 		}//}}}
 	}
@@ -340,7 +363,7 @@ class puyo1
 		nextpanel[1].repaint();
 	}
 	int getpuyo(int x, int y) 
-	{ // why don't you use this!?
+	{ 
 		return puyomatrix[y][x];
 	}
 	int getRotatedPositionX(int x, int r) 
@@ -457,10 +480,10 @@ class puyo1
 			{
 				v = getConnectedPuyosFrom(x,y);
 				// for debugging...
-				if( v.size() >= 1 ) 
-				{
-				    System.out.println("("+x+","+y+")=|"+v.size()+"|");
-				}
+				// if( v.size() >= 1 ) 
+				// {
+				//    System.out.println("("+x+","+y+")=|"+v.size()+"|");
+				// }
 				if( v.size() >= 4 ) 
 				{
 					int vi;
