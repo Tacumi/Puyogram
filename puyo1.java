@@ -91,6 +91,10 @@ class puyo1
 	{
 		int x,y,i;
 		myframe = new JFrame();
+		myframe =  new JFrame();
+		myframe.setLayout(null); // does not use layout manager
+		myframe.setSize(400,600); // window size : width = 400, height = 600
+		
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mypanels = new JPanel[13][8];
@@ -112,7 +116,8 @@ class puyo1
 		colorList[3] = Color.red;
 		colorList[4] = Color.green;
 
-		for( x = 0; x < 8; x++ ) {
+		for( x = 0; x < 8; x++ )
+		{
 			for( y = 0; y < 13; y++ ) 
 			{
 				JPanel p = new YPanel();
@@ -122,6 +127,7 @@ class puyo1
 							puyoSize,
 							puyoSize); 
 				myframe.add(p);
+				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
 				setpuyo(x,y,0); // no puyo is here
 			}
 			myframe.repaint();
@@ -148,6 +154,22 @@ class puyo1
 		}
 		nextpanel[0].setBackground(colorList[nextColor1]);
 		nextpanel[1].setBackground(colorList[nextColor2]);
+		JPanel panel = new JPanel();
+		panel.setBounds(40,470,600,40);
+
+		scoreLabel = new JLabel();
+		scoreLabel.setBounds(0, 0, 200, 40);
+		scoreLabel.setText("Score: 0");
+
+		panel.add(scoreLabel);
+
+		scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		scoreLabel.setVisible(true);
+
+		myframe.add(panel);
 
 		myframe.setVisible(true); // make the window visible
 		myframe.requestFocus();
@@ -286,7 +308,11 @@ class puyo1
 
 					score+=tempscore*rensa;
 
-					System.out.println("Score: " + score);
+					// System.out.println("Score: " + score);
+
+					scoreLabel.setText("Score: " + score);
+
+					scoreLabel.repaint();
 
 					rensa = 0;
 
@@ -300,18 +326,6 @@ class puyo1
 			}
 			myframe.repaint();
 		}
-	}
-	void rotateBtnMouseReleased(MouseEvent e) 
-	{
-		rotate();
-	}
-	void leftBtnMouseReleased(MouseEvent e) 
-	{
-		moveLeft();
-	}
-	void rightBtnMouseReleased(MouseEvent e) 
-	{
-		moveRight();
 	}
 	void setpuyo(int x, int y, int color) 
 	{
