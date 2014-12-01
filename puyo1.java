@@ -65,10 +65,17 @@ class XPanel extends JPanel
 class puyo1 
 {
 	JFrame myframe;
+	JLabel scoreLabel;
 	JPanel mypanels[][];
 	int puyomatrix[][];
 	Color colorList[];
-	int score = 0;
+	boolean dropFlag;
+	final int puyoSize = 32;
+	int rensa = 0;
+	long score = 0;
+	int tempscore = 0;
+	int fallencount = 0;
+	int level = 1;
 	int puyoX = 3, puyoY = 1;
 	int puyoX2 = 3, puyoY2 = 2;
 	int color1 = 0, color2 = 0;
@@ -76,18 +83,13 @@ class puyo1
 	boolean lock = false;
 	boolean lock2 = false;
 
-	final int puyoSize = 32;
-	boolean firstPlacing = true;
-	boolean gameIsOver = false;
-	int fallCount = 0;
-
 	JPanel nextpanel[];
-	int nextColor1,nextColor2;
+	int nextColor[];
 
-	public puyo1()
-	public static void main(string args[]) 
+	public static void main(String args[]) 
 	{
 		int i,x,y;
+
 		myframe =  new JFrame();
 		myframe.setLayout(null); // does not use layout manager
 		myframe.setSize(400,600); // window size : width = 400, height = 600
@@ -97,14 +99,11 @@ class puyo1
 		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
+
 		nextpanel = new YPanel[2];
-
-		myframe.setLayout(null); // does not use layout manager
-		myframe.setSize(400,600); // window size : width = 400, height = 600
-		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		nextColor1 = (int)(Math.random()*3)+2;
-		nextColor2 = (int)(Math.random()*3)+2;
+		nextColor = new int[2];
+		nextColor[0] = (int)(Math.random()*3)+2;
+		nextColor[1] = (int)(Math.random()*3)+2;
 
 
 		colorList[0] = Color.gray;
@@ -113,21 +112,16 @@ class puyo1
 		colorList[3] = Color.red;
 		colorList[4] = Color.green;
 
-		for( x = 0; x < 8; x++ )
+		for( x = 0; x < 8; x++ ) 
 		{
 			for( y = 0; y < 13; y++ ) 
 			{
 				JPanel p = new YPanel();
 				mypanels[y][x] = p;
-				p.setBounds(30 + puyoSize*x,
-							40 + puyoSize*y,
-							puyoSize,
-							puyoSize); 
 				myframe.add(p);
 				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
 				setpuyo(x,y,0); // no puyo is here
 			}
-			myframe.repaint();
 		}
 		for( x = 0; x < 8; x++ ) 
 		{
@@ -143,14 +137,13 @@ class puyo1
 		{
 			JPanel p = new YPanel();
 			nextpanel[y] = p;
+			myframe.add(p);
 			p.setBounds(30 + puyoSize*8 + 10,
 						40 + puyoSize*y,
 						puyoSize,
 						puyoSize);
-			myframe.add(p);
+			nextpanel[y].setBackground(colorList[nextColor[y]]);
 		}
-		nextpanel[0].setBackground(colorList[nextColor1]);
-		nextpanel[1].setBackground(colorList[nextColor2]);
 
 		JPanel panel = new JPanel();
 		panel.setBounds(40,470,600,40);
@@ -174,52 +167,45 @@ class puyo1
 
 		KeyListener listener = new KeyListener() {
 
-			@Override
+		@Override
 
-			public void keyPressed(KeyEvent event) {
+		public void keyPressed(KeyEvent event) {
 
-				if (event.getKeyCode() == KeyEvent.VK_UP) rotate();
+		    if (event.getKeyCode() == KeyEvent.VK_UP) rotate();
 
-				else if (event.getKeyCode() == KeyEvent.VK_LEFT) moveLeft();
+		    else if (event.getKeyCode() == KeyEvent.VK_LEFT) moveLeft();
 
-				else if (event.getKeyCode() == KeyEvent.VK_RIGHT) moveRight();
+		    else if (event.getKeyCode() == KeyEvent.VK_RIGHT) moveRight();
 
-				else if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = true;
+		    else if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = true;
 
-			}
+		}
 
-			@Override
+		@Override
 
-			public void keyReleased(KeyEvent event) {
+		public void keyReleased(KeyEvent event) {
 
-				if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = false;
+		    if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = false;
 
-			}
+		}
 
-			@Override
+		@Override
 
-			public void keyTyped(KeyEvent event) {
+		public void keyTyped(KeyEvent event) {
 
-			}
+		}
 
-		};
+		  };
 
 		myframe.addKeyListener(listener);
 
-		
+		boolean firstPlacing = true;
+		boolean gameIsOver = false;
+		int fallCount = 0;
 
-		myframe.setVisible(true); // make the window visible
-		myframe.requestFocus();
-	}
-	public static void main(String args[]) 
-	{
-		puyo1 game = new puyo1();
-		game.gameMain();
-	}
-	public void gameMain()
-	{
+		
 		while( gameIsOver != true) 
-		{
+		{//{{{
 			lock = false;
 			if (dropFlag) sleep(10);
 			else sleep(100);
@@ -229,8 +215,8 @@ class puyo1
 			if( firstPlacing ) 
 			{
 				firstPlacing = false;
-				color1=nextColor1;
-				color2=nextColor2;
+				color1 = nextColor[0];
+				color2 = nextColor[1];
 				rotate = 0;
 				puyoX = 3; puyoY = 1; // initialPlace
 				puyoX2 = getRotatedPositionX(puyoX,rotate);
@@ -304,7 +290,7 @@ class puyo1
 					{
 						rensa++;
 					   	fallPuyos();
-						sleep(300);
+						sleep(150);
 					}
 
 					if (rensa > 1) System.out.println("Rensa: " + rensa);
@@ -330,49 +316,35 @@ class puyo1
 			{
 				fallCount++;
 			}
-<<<<<<< Updated upstream
-			myframe.repaint();
-		}
-	}
-	void setpuyo(int x, int y, int color) 
-=======
 		}//}}}
 	}
 	
 	static void setpuyo(int x, int y, int color) 
->>>>>>> Stashed changes
 	{
 		puyomatrix[y][x] = color;
 		mypanels[y][x].setBackground(colorList[color]);
 		mypanels[y][x].repaint();
 	}
-<<<<<<< Updated upstream
-	void setNext(int color1,int color2)
-=======
 	static void setpuyonorepaint(int x, int y, int color) 
 	{
 		puyomatrix[y][x] = color;
 		mypanels[y][x].setBackground(colorList[color]);
 	}
 	static void setNext(int color1,int color2)
->>>>>>> Stashed changes
 	{
-		nextColor1 = color1;
-		nextColor2 = color2;
-		nextpanel[0].setBackground(colorList[nextColor1]);
-		nextpanel[1].setBackground(colorList[nextColor2]);
+		nextColor[0] = color1;
+		nextColor[1] = color2;
+		nextpanel[0].setBackground(colorList[nextColor[0]]);
+		nextpanel[1].setBackground(colorList[nextColor[1]]);
 		nextpanel[0].repaint();
 		nextpanel[1].repaint();
 	}
 	int getpuyo(int x, int y) 
-	{ 
+	{ // why don't you use this!?
 		return puyomatrix[y][x];
 	}
 	int getRotatedPositionX(int x, int r) 
 	{
-		//   2
-		// 1 o 3
-		//   0
 		int rx = 0;
 		switch(r) 
 		{
@@ -387,6 +359,9 @@ class puyo1
 		}
 		return rx;
 	}
+	//   2
+	// 1 o 3
+	//   0
 	int getRotatedPositionY(int y, int r) 
 	{
 		int ry = 0;
@@ -403,7 +378,8 @@ class puyo1
 		}
 		return ry;
 	}
-	boolean rotate() 
+
+	static boolean rotate() 
 	{
 		int nx,ny,nr;
 		lock2 = true;
@@ -426,7 +402,7 @@ class puyo1
 		lock2 = false;
 		return false;
 	}
-	boolean moveLeft() 
+	static boolean moveLeft() 
 	{
 		int nx,ny,nr;
 		lock2 = true;
@@ -448,7 +424,7 @@ class puyo1
 		lock2 = false;
 		return false;
 	}
-	boolean moveRight() 
+	static boolean moveRight() 
 	{
 		int nx,ny,nr;
 		lock2 = true;
@@ -470,7 +446,7 @@ class puyo1
 		lock2 = false;
 		return false;
 	}
-	boolean areConnectedPuyosCleared() 
+	static boolean areConnectedPuyosCleared() 
 	{
 		boolean cleared = false;
 		int x,y;
@@ -481,10 +457,10 @@ class puyo1
 			{
 				v = getConnectedPuyosFrom(x,y);
 				// for debugging...
-//				if( v.size() >= 1 ) 
-//				{
-//				    System.out.println("("+x+","+y+")=|"+v.size()+"|");
-//				}
+				if( v.size() >= 1 ) 
+				{
+				    System.out.println("("+x+","+y+")=|"+v.size()+"|");
+				}
 				if( v.size() >= 4 ) 
 				{
 					int vi;
@@ -508,14 +484,14 @@ class puyo1
 		}
 		return cleared;
 	}
-	java.util.Vector getConnectedPuyosFrom(int x, int y) 
+	static java.util.Vector getConnectedPuyosFrom(int x, int y) 
 	{
 		java.util.Vector v = new java.util.Vector();
 		getConnectedPuyosFrom(x,y,v);
 		return v;
 	}
 	// NOTE: an example of method overloading...
-	void getConnectedPuyosFrom(int x, int y, java.util.Vector v) 
+	static void getConnectedPuyosFrom(int x, int y, java.util.Vector v) 
 	{
 		int vi;
 		int color;
@@ -557,7 +533,7 @@ class puyo1
 
 		return;
 	}
-	void fallPuyos() 
+	static void fallPuyos() 
 	{
 		int fallcount;
 		do 
