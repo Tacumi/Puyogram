@@ -1,20 +1,21 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 class YPanel extends XPanel 
 {
-	Panel innerPanel3;
-	Panel innerPanel4;
+	JPanel innerPanel3;
+	JPanel innerPanel4;
 	Color bgcolor;
 
 	public YPanel() 
 	{
 		setLayout(null);
-		innerPanel3 = new Panel();
+		innerPanel3 = new JPanel();
 		add(innerPanel3);
 		innerPanel3.setBackground(Color.black);
 
-		innerPanel4 = new Panel();
+		innerPanel4 = new JPanel();
 		add(innerPanel4);
 		innerPanel4.setBackground(Color.black);
 
@@ -37,19 +38,19 @@ class YPanel extends XPanel
 	}
 }
 
-class XPanel extends Panel 
+class XPanel extends JPanel 
 {
-	Panel innerPanel1;
-	Panel innerPanel2;
+	JPanel innerPanel1;
+	JPanel innerPanel2;
 
 	public XPanel() 
 	{
 		setLayout(null);
-		innerPanel1 = new Panel();
+		innerPanel1 = new JPanel();
 		add(innerPanel1);
 		innerPanel1.setBackground(Color.white);
 
-		innerPanel2 = new Panel();
+		innerPanel2 = new JPanel();
 		add(innerPanel2);
 		innerPanel2.setBackground(Color.white);
 	}
@@ -61,10 +62,10 @@ class XPanel extends Panel
 	}
 }
 
-public class puyo1 
+class puyo1 
 {
-	static Frame myframe;
-	static Panel mypanels[][];
+	static JFrame myframe;
+	static JPanel mypanels[][];
 	static int puyomatrix[][];
 	static Color colorList[];
 	static int score = 0;
@@ -75,12 +76,12 @@ public class puyo1
 	static boolean lock = false;
 	static boolean lock2 = false;
 
-	static Panel nextpanel[];
+	static JPanel nextpanel[];
 	static int nextColor[];
 
-	static Panel rotateBtn;
-	static Panel leftBtn;
-	static Panel rightBtn;
+	static JPanel rotateBtn;
+	static JPanel leftBtn;
+	static JPanel rightBtn;
 
 	public static void main(String args[]) 
 	{
@@ -91,9 +92,10 @@ public class puyo1
 		int fallCount = 0;
 
 
-		myframe =  new Frame();
+		myframe =  new JFrame();
 		myframe.setLayout(null); // does not use layout manager
 		myframe.setSize(400,600); // window size : width = 400, height = 600
+<<<<<<< HEAD
 		myframe.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
 				myframe.dispose();
@@ -101,30 +103,35 @@ public class puyo1
 			}
 			});
 		myframe.setVisible(true); // make the window visible
+=======
+		
+		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+>>>>>>> origin/pb
 
-		rotateBtn = new Panel();
+		rotateBtn = new JPanel();
 		myframe.add(rotateBtn);
 		rotateBtn.setBounds(200,500,48,48);
 		rotateBtn.setBackground(Color.red);
 
-		leftBtn = new Panel();
+		leftBtn = new JPanel();
 		myframe.add(leftBtn);
 		leftBtn.setBounds(120,500,48,48);
 		leftBtn.setBackground(Color.red);
 
-		rightBtn = new Panel();
+		rightBtn = new JPanel();
 		myframe.add(rightBtn);
 		rightBtn.setBounds(280,500,48,48);
 		rightBtn.setBackground(Color.red);
 
-		mypanels = new Panel[13][8];
+		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
 
-		nextpanel = new Panel[2];
+		nextpanel = new YPanel[2];
 		nextColor = new int[2];
 		nextColor[0] = (int)(Math.random()*3)+2;
 		nextColor[1] = (int)(Math.random()*3)+2;
+
 
 		colorList[0] = Color.gray;
 		colorList[1] = Color.white;
@@ -136,7 +143,7 @@ public class puyo1
 		{
 			for( y = 0; y < 13; y++ ) 
 			{
-				Panel p = new YPanel();
+				JPanel p = new YPanel();
 				mypanels[y][x] = p;
 				myframe.add(p);
 				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); setpuyo(x,y,0); // no puyo is here
@@ -154,14 +161,18 @@ public class puyo1
 		
 		for(y = 0; y < 2; y++)
 		{
-			Panel p = new YPanel();
+			JPanel p = new YPanel();
 			nextpanel[y] = p;
 			myframe.add(p);
 			p.setBounds(30 + puyoSize*8 + 10,
 						40 + puyoSize*y,
 						puyoSize,
 						puyoSize);
+			nextpanel[y].setBackground(colorList[nextColor[y]]);
 		}
+
+		myframe.setVisible(true); // make the window visible
+
 		rotateBtn.addMouseListener(new MouseAdapter() 
 				{
 				public void mouseReleased(MouseEvent e) 
@@ -287,6 +298,7 @@ public class puyo1
 	{
 		puyomatrix[y][x] = color;
 		mypanels[y][x].setBackground(colorList[color]);
+		mypanels[y][x].repaint();
 	}
 	static void setNext(int color1,int color2)
 	{
@@ -294,6 +306,8 @@ public class puyo1
 		nextColor[1] = color2;
 		nextpanel[0].setBackground(colorList[nextColor[0]]);
 		nextpanel[1].setBackground(colorList[nextColor[1]]);
+		nextpanel[0].repaint();
+		nextpanel[1].repaint();
 	}
 	static int getpuyo(int x, int y) 
 	{ // why don't you use this!?
