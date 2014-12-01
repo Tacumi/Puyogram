@@ -91,12 +91,9 @@ class puyo1
 		myframe =  new JFrame();
 		myframe.setLayout(null); // does not use layout manager
 		myframe.setSize(400,600); // window size : width = 400, height = 600
-		myframe.addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent e){
-				myframe.dispose();
-				System.exit(0);
-			}
-			});
+		
+		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		myframe.setVisible(true); // make the window visible
 
 		rotateBtn = new JPanel();
