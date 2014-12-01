@@ -241,18 +241,21 @@ class puyo1
 						setpuyo(puyoX,puyoY,0);
 						puyoY++;
 						setpuyo(puyoX,puyoY,color1);
+						sleep(20);
 					}
 					while(getpuyo(puyoX2,puyoY2+1) == 0) 
 					{
 						setpuyo(puyoX2,puyoY2,0);
 						puyoY2++;
 						setpuyo(puyoX2,puyoY2,color2);
+						sleep(20);
 					}
 					while(rotate == 0 && getpuyo(puyoX,puyoY+1) == 0) 
 					{
 						setpuyo(puyoX,puyoY,0);
 						puyoY++;
 						setpuyo(puyoX,puyoY,color1);
+						sleep(20);
 					}
 					// clear connected puyos and falldown other puyos...
 					// clear connected puyos and falldown other puyos...
@@ -442,6 +445,7 @@ class puyo1
 					{
 						p = (Point)v.elementAt(vi);
 						setpuyo(p.x, p.y, 0); // clear it
+						sleep(100);
 					}
 					cleared = true;
 
@@ -516,6 +520,7 @@ class puyo1
 						setpuyo(x,y+1,getpuyo(x,y)); // fall the puyo
 						setpuyo(x,y,0); // the last position should be empty
 						fallcount++; // count-up fallout counter
+						sleep(100);
 					}
 				}
 			}
