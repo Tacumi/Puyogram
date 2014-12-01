@@ -64,7 +64,6 @@ class XPanel extends JPanel
 
 class puyo1 
 {
-
 	JFrame myframe;
 	JPanel mypanels[][];
 	int puyomatrix[][];
@@ -77,9 +76,6 @@ class puyo1
 	boolean lock = false;
 	boolean lock2 = false;
 
-	JPanel rotateBtn;
-	JPanel leftBtn;
-	JPanel rightBtn;
 	final int puyoSize = 32;
 	boolean firstPlacing = true;
 	boolean gameIsOver = false;
@@ -96,26 +92,10 @@ class puyo1
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
 		nextpanel = new YPanel[2];
-		rotateBtn = new JPanel();
-		leftBtn = new JPanel();
-		rightBtn = new JPanel();
 
 		myframe.setLayout(null); // does not use layout manager
 		myframe.setSize(400,600); // window size : width = 400, height = 600
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		rotateBtn.setBounds(200,500,48,48);
-		rotateBtn.setBackground(Color.red);
-		rotateBtn.setVisible(true);
-		myframe.add(rotateBtn);
-
-		leftBtn.setBounds(120,500,48,48);
-		leftBtn.setBackground(Color.red);
-		myframe.add(leftBtn);
-
-		rightBtn.setBounds(280,500,48,48);
-		rightBtn.setBackground(Color.red);
-		myframe.add(rightBtn);
 
 		nextColor1 = (int)(Math.random()*3)+2;
 		nextColor2 = (int)(Math.random()*3)+2;
@@ -164,42 +144,57 @@ class puyo1
 		nextpanel[0].setBackground(colorList[nextColor1]);
 		nextpanel[1].setBackground(colorList[nextColor2]);
 
-		myframe.setVisible(true); // make the window visible
+		KeyListener listener = new KeyListener() {
 
-		rotateBtn.addMouseListener(new MouseAdapter() 
-				{
-					public void mouseReleased(MouseEvent e) 
-					{
-						rotateBtnMouseReleased(e);
-					}
-				} );
-		leftBtn.addMouseListener(new MouseAdapter() 
-				{
-					public void mouseReleased(MouseEvent e) 
-					{
-						leftBtnMouseReleased(e);
-					}
-				} );
-		rightBtn.addMouseListener(new MouseAdapter() 
-				{
-					public void mouseReleased(MouseEvent e) 
-					{
-						rightBtnMouseReleased(e);
-					}
-				} );
+			@Override
+
+			public void keyPressed(KeyEvent event) {
+
+				if (event.getKeyCode() == KeyEvent.VK_UP) rotate();
+
+				else if (event.getKeyCode() == KeyEvent.VK_LEFT) moveLeft();
+
+				else if (event.getKeyCode() == KeyEvent.VK_RIGHT) moveRight();
+
+				else if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = true;
+
+			}
+
+			@Override
+
+			public void keyReleased(KeyEvent event) {
+
+				if (event.getKeyCode() == KeyEvent.VK_DOWN) dropFlag = false;
+
+			}
+
+			@Override
+
+			public void keyTyped(KeyEvent event) {
+
+			}
+
+		};
+
+		myframe.addKeyListener(listener);
+
+		
+
+		myframe.setVisible(true); // make the window visible
+		myframe.requestFocus();
 	}
 	public static void main(String args[]) 
 	{
 		puyo1 game = new puyo1();
 		game.gameMain();
-		
 	}
 	public void gameMain()
 	{
 		while( gameIsOver != true) 
 		{
 			lock = false;
-			sleep(100);
+			if (dropFlag) sleep(10);
+			else sleep(100);
 			lock = true;
 			while( lock2 ) 
 			{ sleep(10); }
@@ -271,9 +266,15 @@ class puyo1
 					// !!--check here--!!
 					while( areConnectedPuyosCleared() ) 
 					{
-						fallPuyos();
+						rensa++;
+					   	fallPuyos();
 						sleep(300);
 					}
+
+					if (rensa > 1) System.out.println("Rensa: " + rensa);
+
+					rensa = 0;
+
 					// !!--check here--!!
 				}
 			} else 
