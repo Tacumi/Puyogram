@@ -70,7 +70,8 @@ class puyo1
 	static Color colorList[];
 	static boolean dropFlag;
 	static int rensa = 0;
-	static int score = 0;
+	static long score = 0;
+	static int tempscore = 0;
 	static int puyoX = 3, puyoY = 1;
 	static int puyoX2 = 3, puyoY2 = 2;
 	static int color1 = 0, color2 = 0;
@@ -306,7 +307,15 @@ class puyo1
 
 					if (rensa > 1) System.out.println("Rensa: " + rensa);
 
+					System.out.println("Turn score: " + tempscore);
+
+					score+=tempscore*rensa;
+
+					System.out.println("Score: " + score);
+
 					rensa = 0;
+
+					tempscore = 0;
 
 					// !!--check here--!!
 				}
@@ -476,6 +485,8 @@ class puyo1
 						setpuyo(p.x, p.y, 0); // clear it
 					}
 					cleared = true;
+
+					tempscore += v.size()*50;
 				}
 			}
 		}
