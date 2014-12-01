@@ -82,10 +82,6 @@ class puyo1
 	static JPanel nextpanel[];
 	static int nextColor[];
 
-	static JPanel rotateBtn;
-	static JPanel leftBtn;
-	static JPanel rightBtn;
-
 	public static void main(String args[]) 
 	{
 		int i,x,y;
@@ -96,21 +92,6 @@ class puyo1
 		myframe.setSize(400,600); // window size : width = 400, height = 600
 		
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		rotateBtn = new JPanel();
-		myframe.add(rotateBtn);
-		rotateBtn.setBounds(200,500,48,48);
-		rotateBtn.setBackground(Color.red);
-
-		leftBtn = new JPanel();
-		myframe.add(leftBtn);
-		leftBtn.setBounds(120,500,48,48);
-		leftBtn.setBackground(Color.red);
-
-		rightBtn = new JPanel();
-		myframe.add(rightBtn);
-		rightBtn.setBounds(280,500,48,48);
-		rightBtn.setBackground(Color.red);
 
 		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
@@ -162,28 +143,6 @@ class puyo1
 
 		myframe.setVisible(true); // make the window visible
 		myframe.requestFocus();
-
-		rotateBtn.addMouseListener(new MouseAdapter() 
-				{
-				public void mouseReleased(MouseEvent e) 
-				{
-				rotateBtnMouseReleased(e);
-				}
-				} );
-		leftBtn.addMouseListener(new MouseAdapter() 
-				{
-				public void mouseReleased(MouseEvent e) 
-				{
-				leftBtnMouseReleased(e);
-				}
-				} );
-		rightBtn.addMouseListener(new MouseAdapter() 
-				{
-				public void mouseReleased(MouseEvent e) 
-				{
-				rightBtnMouseReleased(e);
-				}
-				} );
 
 		KeyListener listener = new KeyListener() {
 
