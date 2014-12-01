@@ -94,8 +94,6 @@ class puyo1
 		
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		myframe.setVisible(true); // make the window visible
-
 		rotateBtn = new JPanel();
 		myframe.add(rotateBtn);
 		rotateBtn.setBounds(200,500,48,48);
@@ -158,6 +156,9 @@ class puyo1
 						puyoSize);
 			nextpanel[y].setBackground(colorList[nextColor[y]]);
 		}
+
+		myframe.setVisible(true); // make the window visible
+
 		rotateBtn.addMouseListener(new MouseAdapter() 
 				{
 				public void mouseReleased(MouseEvent e) 
