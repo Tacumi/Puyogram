@@ -90,6 +90,43 @@ class puyo1
 	{
 		int i,x,y;
 		myframe =  new JFrame();
+		final int puyoSize = 32;
+		boolean firstPlacing = true;
+		boolean gameIsOver = false;
+		int fallCount = 0;
+
+
+		myframe =  new JFrame();
+		myframe.setLayout(null); // does not use layout manager
+		myframe.setSize(400,600); // window size : width = 400, height = 600
+		myframe.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				myframe.dispose();
+				gameIsOver = true;
+			}
+			});
+		myframe.setVisible(true); // make the window visible
+=======
+		
+		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+>>>>>>> origin/pb
+
+		rotateBtn = new JPanel();
+		myframe.add(rotateBtn);
+		rotateBtn.setBounds(200,500,48,48);
+		rotateBtn.setBackground(Color.red);
+
+		leftBtn = new JPanel();
+		myframe.add(leftBtn);
+		leftBtn.setBounds(120,500,48,48);
+		leftBtn.setBackground(Color.red);
+
+		rightBtn = new JPanel();
+		myframe.add(rightBtn);
+		rightBtn.setBounds(280,500,48,48);
+		rightBtn.setBackground(Color.red);
+
+>>>>>>> f51ef01f39bc4bbb1916d60293baff4ba60917d8
 		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
@@ -179,8 +216,6 @@ class puyo1
 		};
 
 		myframe.addKeyListener(listener);
-
-		
 
 		myframe.setVisible(true); // make the window visible
 		myframe.requestFocus();
