@@ -260,10 +260,11 @@ class puyo1
 				if( (rotate == 0 || getpuyo(puyoX,puyoY) == 0)
 						&& (rotate == 2 || getpuyo(puyoX2,puyoY2) == 0) ) 
 				{
-					setpuyo(puyoX,puyoY-1,0);
-					setpuyo(puyoX2,puyoY2-1,0);
-					setpuyo(puyoX,puyoY,color1);
-					setpuyo(puyoX2,puyoY2,color2);
+					setpuyonorepaint(puyoX,puyoY-1,0);
+					setpuyonorepaint(puyoX2,puyoY2-1,0);
+					setpuyonorepaint(puyoX,puyoY,color1);
+					setpuyonorepaint(puyoX2,puyoY2,color2);
+					myframe.repaint();
 				} else 
 				{
 					firstPlacing = true;
@@ -273,25 +274,29 @@ class puyo1
 					// fall each puyo
 					while(rotate != 0 && getpuyo(puyoX,puyoY+1) == 0) 
 					{
-						setpuyo(puyoX,puyoY,0);
+						setpuyonorepaint(puyoX,puyoY,0);
 						puyoY++;
-						setpuyo(puyoX,puyoY,color1);
+						setpuyonorepaint(puyoX,puyoY,color1);
 						sleep(20);
+						myframe.repaint();
 					}
 					while(getpuyo(puyoX2,puyoY2+1) == 0) 
 					{
-						setpuyo(puyoX2,puyoY2,0);
+						setpuyonorepaint(puyoX2,puyoY2,0);
 						puyoY2++;
-						setpuyo(puyoX2,puyoY2,color2);
+						setpuyonorepaint(puyoX2,puyoY2,color2);
 						sleep(20);
+						myframe.repaint();
 					}
 					while(rotate == 0 && getpuyo(puyoX,puyoY+1) == 0) 
 					{
-						setpuyo(puyoX,puyoY,0);
+						setpuyonorepaint(puyoX,puyoY,0);
 						puyoY++;
-						setpuyo(puyoX,puyoY,color1);
+						setpuyonorepaint(puyoX,puyoY,color1);
 						sleep(20);
+						myframe.repaint();
 					}
+					
 					// clear connected puyos and falldown other puyos...
 					// clear connected puyos and falldown other puyos...
 					// !!--check here--!!
@@ -320,20 +325,37 @@ class puyo1
 
 					// !!--check here--!!
 				}
+
 			} else 
 			{
 				fallCount++;
 			}
+<<<<<<< Updated upstream
 			myframe.repaint();
 		}
 	}
 	void setpuyo(int x, int y, int color) 
+=======
+		}//}}}
+	}
+	
+	static void setpuyo(int x, int y, int color) 
+>>>>>>> Stashed changes
 	{
 		puyomatrix[y][x] = color;
 		mypanels[y][x].setBackground(colorList[color]);
 		mypanels[y][x].repaint();
 	}
+<<<<<<< Updated upstream
 	void setNext(int color1,int color2)
+=======
+	static void setpuyonorepaint(int x, int y, int color) 
+	{
+		puyomatrix[y][x] = color;
+		mypanels[y][x].setBackground(colorList[color]);
+	}
+	static void setNext(int color1,int color2)
+>>>>>>> Stashed changes
 	{
 		nextColor1 = color1;
 		nextColor2 = color2;
@@ -385,7 +407,7 @@ class puyo1
 	{
 		int nx,ny,nr;
 		lock2 = true;
-		if(lock==false) 
+		if(lock==false && (puyoX+puyoX2+puyoY+puyoY2!=0)) // "back from dead" bug fix 
 		{
 			nr = (rotate + 1)%4;
 			nx = getRotatedPositionX(puyoX,nr);
@@ -408,7 +430,7 @@ class puyo1
 	{
 		int nx,ny,nr;
 		lock2 = true;
-		if(lock==false) 
+		if(lock==false && (puyoX+puyoX2+puyoY+puyoY2!=0)) // "back from dead" bug fix 
 		{
 			if( (rotate == 1 || getpuyo(puyoX-1,puyoY) == 0)
 					&& (rotate == 3 || getpuyo(puyoX2-1,puyoY2) == 0) ) 
@@ -430,7 +452,7 @@ class puyo1
 	{
 		int nx,ny,nr;
 		lock2 = true;
-		if(lock==false) 
+		if(lock==false && (puyoX+puyoX2+puyoY+puyoY2!=0)) // "back from dead" bug fix 
 		{
 			if( (rotate == 3 || getpuyo(puyoX+1,puyoY) == 0)
 					&& (rotate == 1 || getpuyo(puyoX2+1,puyoY2) == 0) ) 
@@ -474,6 +496,11 @@ class puyo1
 						sleep(100);
 					}
 					cleared = true;
+
+					puyoX=0;
+					puyoX2=0;
+					puyoY=0;
+					puyoY2=0;
 
 					tempscore += v.size()*50;
 				}
@@ -543,13 +570,15 @@ class puyo1
 				{
 					if( getpuyo(x,y) != 0 && getpuyo(x,y+1) == 0 ) 
 					{
-						setpuyo(x,y+1,getpuyo(x,y)); // fall the puyo
-						setpuyo(x,y,0); // the last position should be empty
+						setpuyonorepaint(x,y+1,getpuyo(x,y)); // fall the puyo
+						setpuyonorepaint(x,y,0); // the last position should be empty
 						fallcount++; // count-up fallout counter
 						sleep(100);
 					}
 				}
+
 			}
+			myframe.repaint();
 		} while( fallcount != 0 );
 	}
 	static void sleep(long msec) 
