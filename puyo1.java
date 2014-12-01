@@ -82,51 +82,17 @@ class puyo1
 	int fallCount = 0;
 	boolean dropFlag = false;
 	int rensa;
+	int tempscore=0;
 
 	JPanel nextpanel[];
 	int nextColor1,nextColor2;
 
 	public puyo1()
 	{
-		int i,x,y;
-		myframe =  new JFrame();
-		final int puyoSize = 32;
-		boolean firstPlacing = true;
-		boolean gameIsOver = false;
-		int fallCount = 0;
-
-
-		myframe =  new JFrame();
-		myframe.setLayout(null); // does not use layout manager
-		myframe.setSize(400,600); // window size : width = 400, height = 600
-		myframe.addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent e){
-				myframe.dispose();
-				gameIsOver = true;
-			}
-			});
-		myframe.setVisible(true); // make the window visible
-=======
-		
+		int x,y,i;
+		myframe = new JFrame();
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
->>>>>>> origin/pb
 
-		rotateBtn = new JPanel();
-		myframe.add(rotateBtn);
-		rotateBtn.setBounds(200,500,48,48);
-		rotateBtn.setBackground(Color.red);
-
-		leftBtn = new JPanel();
-		myframe.add(leftBtn);
-		leftBtn.setBounds(120,500,48,48);
-		leftBtn.setBackground(Color.red);
-
-		rightBtn = new JPanel();
-		myframe.add(rightBtn);
-		rightBtn.setBounds(280,500,48,48);
-		rightBtn.setBackground(Color.red);
-
->>>>>>> f51ef01f39bc4bbb1916d60293baff4ba60917d8
 		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
@@ -183,6 +149,9 @@ class puyo1
 		nextpanel[0].setBackground(colorList[nextColor1]);
 		nextpanel[1].setBackground(colorList[nextColor2]);
 
+		myframe.setVisible(true); // make the window visible
+		myframe.requestFocus();
+
 		KeyListener listener = new KeyListener() {
 
 			@Override
@@ -227,7 +196,7 @@ class puyo1
 	}
 	public void gameMain()
 	{
-		while( gameIsOver != true) 
+		while( gameIsOver != true)
 		{
 			lock = false;
 			if (dropFlag) sleep(10);
@@ -285,18 +254,21 @@ class puyo1
 						setpuyo(puyoX,puyoY,0);
 						puyoY++;
 						setpuyo(puyoX,puyoY,color1);
+						sleep(20);
 					}
 					while(getpuyo(puyoX2,puyoY2+1) == 0) 
 					{
 						setpuyo(puyoX2,puyoY2,0);
 						puyoY2++;
 						setpuyo(puyoX2,puyoY2,color2);
+						sleep(20);
 					}
 					while(rotate == 0 && getpuyo(puyoX,puyoY+1) == 0) 
 					{
 						setpuyo(puyoX,puyoY,0);
 						puyoY++;
 						setpuyo(puyoX,puyoY,color1);
+						sleep(20);
 					}
 					// clear connected puyos and falldown other puyos...
 					// clear connected puyos and falldown other puyos...
@@ -310,7 +282,15 @@ class puyo1
 
 					if (rensa > 1) System.out.println("Rensa: " + rensa);
 
+					System.out.println("Turn score: " + tempscore);
+
+					score+=tempscore*rensa;
+
+					System.out.println("Score: " + score);
+
 					rensa = 0;
+
+					tempscore = 0;
 
 					// !!--check here--!!
 				}
@@ -477,8 +457,11 @@ class puyo1
 					{
 						p = (Point)v.elementAt(vi);
 						setpuyo(p.x, p.y, 0); // clear it
+						sleep(100);
 					}
 					cleared = true;
+
+					tempscore += v.size()*50;
 				}
 			}
 		}
@@ -549,6 +532,7 @@ class puyo1
 						setpuyo(x,y+1,getpuyo(x,y)); // fall the puyo
 						setpuyo(x,y,0); // the last position should be empty
 						fallcount++; // count-up fallout counter
+						sleep(100);
 					}
 				}
 			}
