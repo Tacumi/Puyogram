@@ -33,8 +33,8 @@ class YPanel extends XPanel
 	}
 	public void setBackground(Color color) 
 	{
-		bgcolor = color;
 		super.setBackground(color);
+		bgcolor = color;
 	}
 }
 
@@ -92,31 +92,31 @@ class puyo1
 	{
 		int i,x,y;
 		myframe =  new JFrame();
-		myframe.setLayout(null); // does not use layout manager
-		myframe.setSize(400,600); // window size : width = 400, height = 600
-		myframe.setVisible(true); // make the window visible
-		
-		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		rotateBtn = new JPanel();
-		myframe.add(rotateBtn);
-		rotateBtn.setBounds(200,500,48,48);
-		rotateBtn.setBackground(Color.red);
-
-		leftBtn = new JPanel();
-		myframe.add(leftBtn);
-		leftBtn.setBounds(120,500,48,48);
-		leftBtn.setBackground(Color.red);
-
-		rightBtn = new JPanel();
-		myframe.add(rightBtn);
-		rightBtn.setBounds(280,500,48,48);
-		rightBtn.setBackground(Color.red);
-
 		mypanels = new JPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
-
 		nextpanel = new YPanel[2];
+		rotateBtn = new JPanel();
+		leftBtn = new JPanel();
+		rightBtn = new JPanel();
+
+		myframe.setLayout(null); // does not use layout manager
+		myframe.setSize(400,600); // window size : width = 400, height = 600
+		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		rotateBtn.setBounds(200,500,48,48);
+		rotateBtn.setBackground(Color.red);
+		rotateBtn.setVisible(true);
+		myframe.add(rotateBtn);
+
+		leftBtn.setBounds(120,500,48,48);
+		leftBtn.setBackground(Color.red);
+		myframe.add(leftBtn);
+
+		rightBtn.setBounds(280,500,48,48);
+		rightBtn.setBackground(Color.red);
+		myframe.add(rightBtn);
+
 		nextColor1 = (int)(Math.random()*3)+2;
 		nextColor2 = (int)(Math.random()*3)+2;
 
@@ -132,11 +132,14 @@ class puyo1
 			{
 				JPanel p = new YPanel();
 				mypanels[y][x] = p;
+				p.setBounds(30 + puyoSize*x,
+							40 + puyoSize*y,
+							puyoSize,
+							puyoSize); 
 				myframe.add(p);
-				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
 				setpuyo(x,y,0); // no puyo is here
-				myframe.repaint();
 			}
+			myframe.repaint();
 		}
 		for( x = 0; x < 8; x++ ) 
 		{
@@ -152,11 +155,11 @@ class puyo1
 		{
 			JPanel p = new YPanel();
 			nextpanel[y] = p;
-			myframe.add(p);
 			p.setBounds(30 + puyoSize*8 + 10,
 						40 + puyoSize*y,
 						puyoSize,
 						puyoSize);
+			myframe.add(p);
 		}
 		nextpanel[0].setBackground(colorList[nextColor1]);
 		nextpanel[1].setBackground(colorList[nextColor2]);
@@ -277,6 +280,7 @@ class puyo1
 			{
 				fallCount++;
 			}
+			myframe.repaint();
 		}
 	}
 	void rotateBtnMouseReleased(MouseEvent e) 
