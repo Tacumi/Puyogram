@@ -1,6 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
+class MPanel extends JPanel
+{
+	Image images[][];
+	int number = 0;
+	int stat = 0;
+	Color bgcolor;
 
 class IPanel extends JPanel
 {
@@ -20,7 +27,7 @@ class IPanel extends JPanel
 		super.setBackground(color);
 		bgcolor = color;
 	}
-}
+}//}}}
 
 class puyo1 
 {
@@ -56,7 +63,7 @@ class puyo1
 		
 		myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		mypanels = new JPanel[13][8];
+		mypanels = new MPanel[13][8];
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
 
@@ -85,7 +92,7 @@ class puyo1
 				setpuyo(x,y,0); // no puyo is here
 			}
 		}
-		for( x = 0; x < 8; x++ ) 
+		for( x = 0; x < 8; x++ )
 		{
 			setpuyo(x,12, 1); // ground is here
 		}
