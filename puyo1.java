@@ -2,30 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-class YPanel extends XPanel 
+class IPanel extends JPanel
 {
-	JPanel innerPanel3;
-	JPanel innerPanel4;
+
 	Color bgcolor;
 
-	public YPanel() 
-	{
-		setLayout(null);
-		innerPanel3 = new JPanel();
-		add(innerPanel3);
-		innerPanel3.setBackground(Color.black);
-
-		innerPanel4 = new JPanel();
-		add(innerPanel4);
-		innerPanel4.setBackground(Color.black);
-
-		bgcolor = super.getBackground();
-	}
 	public void setBounds(int x, int y, int width, int height) 
 	{
 		super.setBounds(x,y,width,height);
-		innerPanel3.setBounds(4,height-8,width-8,8);
-		innerPanel4.setBounds(width-8,4,8,height-8);
 	}
 	public Color getBackground() 
 	{
@@ -33,31 +17,8 @@ class YPanel extends XPanel
 	}
 	public void setBackground(Color color) 
 	{
-		super.setBackground(color); bgcolor = color;
-	}
-}
-
-class XPanel extends JPanel 
-{
-	JPanel innerPanel1;
-	JPanel innerPanel2;
-
-	public XPanel() 
-	{
-		setLayout(null);
-		innerPanel1 = new JPanel();
-		add(innerPanel1);
-		innerPanel1.setBackground(Color.white);
-
-		innerPanel2 = new JPanel();
-		add(innerPanel2);
-		innerPanel2.setBackground(Color.white);
-	}
-	public void setBounds(int x, int y, int width, int height) 
-	{
-		super.setBounds(x,y,width,height);
-		innerPanel1.setBounds(0,0,width-8,8);
-		innerPanel2.setBounds(0,0,8,height-8);
+		super.setBackground(color);
+		bgcolor = color;
 	}
 }
 
@@ -98,7 +59,7 @@ class puyo1
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
 
-		nextpanel = new YPanel[2];
+		nextpanel = new IPanel[2];
 		nextColor = new int[2];
 		nextColor[0] = (int)(Math.random()*3)+2;
 		nextColor[1] = (int)(Math.random()*3)+2;
@@ -110,11 +71,11 @@ class puyo1
 		colorList[3] = Color.red;
 		colorList[4] = Color.green;
 
-		for( x = 0; x < 8; x++ )
+		for( x = 0; x < 8; x++ ) 
 		{
 			for( y = 0; y < 13; y++ ) 
 			{
-				JPanel p = new YPanel();
+				JPanel p = new IPanel();
 				mypanels[y][x] = p;
 				myframe.add(p);
 				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
@@ -133,7 +94,7 @@ class puyo1
 		
 		for(y = 0; y < 2; y++)
 		{
-			JPanel p = new YPanel();
+			JPanel p = new IPanel();
 			nextpanel[y] = p;
 			myframe.add(p);
 			p.setBounds(30 + puyoSize*8 + 10,
@@ -142,22 +103,23 @@ class puyo1
 						puyoSize);
 			nextpanel[y].setBackground(colorList[nextColor[y]]);
 		}
-		JPanel panel = new JPanel();
-		panel.setBounds(40,470,600,40);
+
+		JPanel scorepanel = new JPanel();
+		scorepanel.setBounds(40,470,600,40);
 
 		scoreLabel = new JLabel();
 		scoreLabel.setBounds(0, 0, 200, 40);
 		scoreLabel.setText("Score: 0");
 
-		panel.add(scoreLabel);
+		scorepanel.add(scoreLabel);
 
 		scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		scorepanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		scoreLabel.setVisible(true);
 
-		myframe.add(panel);
+		myframe.add(scorepanel);
 
 		myframe.setVisible(true); // make the window visible
 		myframe.requestFocus();
@@ -296,12 +258,15 @@ class puyo1
 
 					if (rensa > 1) System.out.println("Rensa: " + rensa);
 
-					System.out.println("Turn score: " + tempscore);
+					if (tempscore!=0) System.out.println("Turn score: " + tempscore);
+					
 
 					score+=tempscore*rensa;
 
 					rensacount+=rensa;
 
+					System.out.print(rensacount);
+					
 					// System.out.println("Score: " + score);
 
 					scoreLabel.setText("Score: " + score);
@@ -319,7 +284,7 @@ class puyo1
 			{
 				fallCount++;
 			}
-			if (rensacount>(level*5)) {
+			if (rensacount>=(level*(level+1)*5)) {
 				
 				level++;
 
@@ -332,7 +297,7 @@ class puyo1
 				myframe.repaint();
 
 				System.out.println("Level " + level);
-				System.out.println("Till next level: " + (level*5));
+				System.out.println("Till next level: " + (level*(level+1)*5));
 				
 				sleep(2000);
 
@@ -505,14 +470,14 @@ class puyo1
 		}
 		return cleared;
 	}
-	static java.util.Vector getConnectedPuyosFrom(int x, int y) 
+	static java.util.Vector<Point> getConnectedPuyosFrom(int x, int y) 
 	{
-		java.util.Vector v = new java.util.Vector();
+		java.util.Vector<Point> v = new java.util.Vector<Point>();
 		getConnectedPuyosFrom(x,y,v);
 		return v;
 	}
 	// NOTE: an example of method overloading...
-	static void getConnectedPuyosFrom(int x, int y, java.util.Vector v) 
+	static void getConnectedPuyosFrom(int x, int y, java.util.Vector<Point> v) 
 	{
 		int vi;
 		int color;
