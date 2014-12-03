@@ -123,8 +123,6 @@ class puyo1
 
 		scorepanel.add(scoreLabel);
 
-		scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 		scorepanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		scoreLabel.setVisible(true);
@@ -571,8 +569,7 @@ class puyo1
 		try
 		{
 			Thread.sleep(msec);
-		}catch(InterruptedException ie) 
-		{
+		}catch(InterruptedException ie) {
 		}
 	}
 }
