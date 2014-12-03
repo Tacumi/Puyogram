@@ -281,7 +281,7 @@ class puyo1
 			{
 				fallCount++;
 			}
-			if (rensacount>=(level*5)) {
+			if (rensacount>=(level*(level+1)*5)) {
 				
 				level++;
 
