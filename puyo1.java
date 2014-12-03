@@ -43,7 +43,8 @@ class puyo1
 	static boolean lock2 = false;
 	static JPanel nextpanel[];
 	static int nextColor[];
-
+    static JLabel playerlist[];
+    
 	public static void main(String args[]) 
 	{
 		int i,x,y;
@@ -70,6 +71,8 @@ class puyo1
 		colorList[2] = Color.yellow;
 		colorList[3] = Color.red;
 		colorList[4] = Color.green;
+		
+		playerlist(3);
 
 		for( x = 0; x < 8; x++ ) 
 		{
@@ -105,7 +108,7 @@ class puyo1
 		}
 
 		JPanel scorepanel = new JPanel();
-		scorepanel.setBounds(40,470,600,40);
+		scorepanel.setBounds(0,470,60,40);
 
 		scoreLabel = new JLabel();
 		scoreLabel.setBounds(0, 0, 200, 40);
@@ -265,7 +268,7 @@ class puyo1
 
 					rensacount+=rensa;
 
-					System.out.print(rensacount);
+					System.out.println(rensacount);
 					
 					// System.out.println("Score: " + score);
 
@@ -303,6 +306,19 @@ class puyo1
 
 			}
 		}//}}}
+	}
+	
+	static void playerlist(int num)
+	{
+		int idx;
+		playerlist = new JLabel[num];
+		for(idx = 0; idx < num; idx++ ){
+			playerlist[idx] = new JLabel();
+			myframe.add(playerlist[idx]);
+			playerlist[idx].setBounds(300, 300+(idx*15), 30, 10);
+			playerlist[idx].setText(""+(idx+1));
+		}
+		myframe.repaint();
 	}
 	
 	static void setpuyo(int x, int y, int color) 
