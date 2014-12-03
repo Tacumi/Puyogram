@@ -64,25 +64,25 @@ class XPanel extends JPanel
 
 class puyo1 
 {
-	JFrame myframe;
-	JLabel scoreLabel;
-	JPanel mypanels[][];
-	int puyomatrix[][];
-	Color colorList[];
-	boolean dropFlag;
-	int rensa = 0;
-	long score = 0;
-	int tempscore = 0;
-	int rensacount = 0;
-	int level = 1;
-	int puyoX = 3, puyoY = 1;
-	int puyoX2 = 3, puyoY2 = 2;
-	int color1 = 0, color2 = 0;
-	int rotate = 0;
-	boolean lock = false;
-	boolean lock2 = false;
-	JPanel nextpanel[];
-	int nextColor[];
+	static JFrame myframe;
+	static JLabel scoreLabel;
+	static JPanel mypanels[][];
+	static int puyomatrix[][];
+	static Color colorList[];
+	static boolean dropFlag;
+	static int rensa = 0;
+	static long score = 0;
+	static int tempscore = 0;
+	static int rensacount = 0;
+	static int level = 1;
+	static int puyoX = 3, puyoY = 1;
+	static int puyoX2 = 3, puyoY2 = 2;
+	static int color1 = 0, color2 = 0;
+	static int rotate = 0;
+	static boolean lock = false;
+	static boolean lock2 = false;
+	static JPanel nextpanel[];
+	static int nextColor[];
 
 	public static void main(String args[]) 
 	{
@@ -298,7 +298,7 @@ class puyo1
 
 					if (rensa > 1) System.out.println("Rensa: " + rensa);
 
-					System.out.println("Turn score: " + tempscore);
+					if (tempscore!=0) System.out.println("Turn score: " + tempscore);
 
 					score+=tempscore*rensa;
 
@@ -362,11 +362,11 @@ class puyo1
 		nextpanel[0].repaint();
 		nextpanel[1].repaint();
 	}
-	int getpuyo(int x, int y) 
+	static int getpuyo(int x, int y) 
 	{ 
 		return puyomatrix[y][x];
 	}
-	int getRotatedPositionX(int x, int r) 
+	static int getRotatedPositionX(int x, int r) 
 	{
 		int rx = 0;
 		switch(r) 
@@ -385,7 +385,7 @@ class puyo1
 	//   2
 	// 1 o 3
 	//   0
-	int getRotatedPositionY(int y, int r) 
+	static int getRotatedPositionY(int y, int r) 
 	{
 		int ry = 0;
 		switch(r) 
