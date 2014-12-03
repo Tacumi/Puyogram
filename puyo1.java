@@ -281,7 +281,7 @@ class puyo1
 			{
 				fallCount++;
 			}
-			if (rensacount>(level*5)) {
+			if (rensacount>=(level*5)) {
 				
 				level++;
 
@@ -294,7 +294,7 @@ class puyo1
 				myframe.repaint();
 
 				System.out.println("Level " + level);
-				System.out.println("Till next level: " + (level*5));
+				System.out.println("Till next level: " + (level*(level+1)*5));
 				
 				sleep(2000);
 
