@@ -153,7 +153,7 @@ class puyo1
         {
             for( y = 0; y < 13; y++ )
             {
-                JPanel p = new MPanel();
+                JPanel p = new MPanel(images);
                 mypanels[y][x] = p;
                 myframe.add(p);
                 p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize);
@@ -172,7 +172,7 @@ class puyo1
 
         for(y = 0; y < 2; y++)
         {
-            JPanel p = new MPanel();
+            JPanel p = new MPanel(images);
             nextpanel[y] = p;
             myframe.add(p);
             p.setBounds(30 + puyoSize*8 + 10,
@@ -471,7 +471,7 @@ class puyo1
 
                             scoresBin = toBytes(Long.reverse(score));
 
-                            for ( int n = 6; n <= buf.length ; n++ ) buf[n] = scoresBin[n-6];
+                            for ( int n = 6; n <= scoresBin.length ; n++ ) buf[n] = scoresBin[n-6];
 
                             // send packet
 
