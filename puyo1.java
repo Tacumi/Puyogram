@@ -123,7 +123,7 @@ class puyo1
 
         int i,x,y;
 
-        final int puyoSize = 32;
+        final int puyoSize = 40;
 
         // init interface
 
@@ -493,6 +493,12 @@ class puyo1
                 while (!gameIsOver) {
                     try { socketDown.receive(packet);
                         for ( int n = 0; n < buf.length ; n++ ) System.out.print(buf[n]);
+						if(buf[0]==0&&buf[1]==0){
+							int temp_ID=parseID(buf,2,5);
+							playerlist[temp_ID].setText(""+byteToLong(buf));
+							myframe.repaint();
+						}
+							
                     } catch (IOException e) { }
                 }
             }
@@ -522,7 +528,7 @@ class puyo1
         for (idx = 0; idx < num; idx++ ) {
             playerlist[idx] = new JLabel();
             myframe.add(playerlist[idx]);
-            playerlist[idx].setBounds(300, 300+(idx*15), 30, 10);
+            playerlist[idx].setBounds(300, 300+(idx*15), 60, 10);
             playerlist[idx].setText(""+(idx+1));
         }
 
@@ -702,6 +708,14 @@ class puyo1
         }
         return cleared;
     }
+	static long byteToLong (byte[] bytes){
+		long sum = 0;
+		for (int i=0;i<8;i++){
+			sum+=bytes[i+6];
+			sum <<= 8;
+		}
+		return Long.reverse(sum);
+	}
     static java.util.Vector<Point> getConnectedPuyosFrom(int x, int y)
     {
         java.util.Vector<Point> v = new java.util.Vector<Point>();
