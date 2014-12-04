@@ -59,6 +59,7 @@ class puyo1
     static final int SERVERPORT = 2424;
     static final int CLIENTPORT = 2323;
     static byte[] buf = new byte[DATALEN];
+    static byte[] scoresBin = new byte[64];
     static DatagramPacket packet = new DatagramPacket(buf, buf.length);
     static DatagramSocket socketUp = null;
     static DatagramSocket socketDown = null;
@@ -401,6 +402,32 @@ class puyo1
                             scoreLabel.repaint();
                             playerlist[myID-1].repaint();
 
+                            // send own score to others
+
+                            buf[0] = 0;
+                            buf[1] = 0;
+
+                            temp_player = myID;
+
+                            buf[5] = (byte)(temp_player/8);
+                            temp_player %= 8;
+                            buf[4] = (byte)(temp_player/4);
+                            temp_player %= 4;
+                            buf[3] = (byte)(temp_player/2);
+                            temp_player %= 2;
+                            buf[2] = (byte)temp_player;
+
+                            // 6-70 backward long byte
+
+                            scoresBin = toBytes(Long.reverse(score));
+
+                            for ( int n = 6; n <= buf.length ; n++ ) buf[n] = scoresBin[n-6];
+
+                            // send packet
+
+                            try { socketUp.send(new DatagramPacket(buf, buf.length, server, SERVERPORT));
+                            } catch (IOException e) { }
+
                             rensa = 0;
 
                             tempscore = 0;
@@ -442,6 +469,8 @@ class puyo1
                     try { socketDown.receive(packet);
                         for ( int n = 0; n < buf.length ; n++ ) System.out.print(buf[n]);
                     } catch (IOException e) { }
+
+                    if (buf[0] == 0 && buf[1] == 0) playerlist[parseID(buf, 2, 5)].setText(parseID(buf, 2, 5) + ". " + parseID(buf, 6, 70));
                 }
             }
         };
@@ -727,5 +756,14 @@ class puyo1
     {
         try { Thread.sleep(msec);
         } catch (InterruptedException ie) { }
+    }
+    public static byte[] toBytes(long b)
+    {
+        byte[] temp = new byte[8];
+        for(int i = 0; i < 8; i++)
+        {
+            temp[i]=(byte)(b >> (8 * (8 - (i+1))));
+        }
+        return temp;
     }
 }
