@@ -4,11 +4,68 @@ import javax.swing.*;
 import java.io.*;
 class MPanel extends JPanel
 {
-	Image images[][];
+	Image[][] images = null;
 	int number = 0;
 	int stat = 0;
 	Color bgcolor;
 
+	public MPanel()
+	{
+	}
+	public MPanel(Image[][] images)
+	{
+		setImages(images);
+	}
+	public void setImages(Image[][] images)
+	{
+		this.images = images;
+	}
+	public Color getBackground()
+	{
+		return bgcolor;
+	}
+	public void setBounds(int x, int y,int width,int height)
+	{
+		super.setBounds(x,y,width,height);
+	}
+		
+	public void paint(Graphics g)
+	{
+		g.drawImage(images[stat][number],0,0,null);
+	}
+	public void change(){
+		number++;
+		if(number >= images[stat].length)
+			number=0;
+	}
+	public void setBackground(Color col)
+	{
+		if(col == Color.gray)
+		{
+			stat=0;
+		}
+		else if(col == Color.white)
+		{
+			stat=1;
+		}
+		else if(col == Color.yellow)
+		{
+			stat=2;
+		}
+		else if(col == Color.red)
+		{
+			stat=3;
+		}
+		else if(col == Color.green)
+		{
+			stat=4;
+		}
+		else{
+			stat=0;
+		}
+		repaint();
+	}
+}
 class IPanel extends JPanel
 {
 
@@ -51,11 +108,19 @@ class puyo1
 	static JPanel nextpanel[];
 	static int nextColor[];
     static JLabel playerlist[];
+	static Image[][] images;
+	static String[][] imageFiles = {
+									{"BGWall.png"},
+									{"Wall.png"},
+									{"Y1.png", "Y2.png", "Y3.png"},
+									{"R1.png", "R2.png", "R3.png"},
+									{"B1.png", "B2.png", "B3.png"},
+									};
     
 	public static void main(String args[]) 
 	{
 		int i,x,y;
-		final int puyoSize = 32;
+		final int puyoSize = 40; 
 
 		myframe =  new JFrame();
 		myframe.setLayout(null); // does not use layout manager
@@ -67,7 +132,7 @@ class puyo1
 		puyomatrix = new int[13][8];
 		colorList = new Color[5];
 
-		nextpanel = new IPanel[2];
+		nextpanel = new MPanel[2];
 		nextColor = new int[2];
 		nextColor[0] = (int)(Math.random()*3)+2;
 		nextColor[1] = (int)(Math.random()*3)+2;
@@ -79,13 +144,14 @@ class puyo1
 		colorList[3] = Color.red;
 		colorList[4] = Color.green;
 		
+		loadImages(imageFiles);
 		playerlist(3);
 
 		for( x = 0; x < 8; x++ ) 
 		{
 			for( y = 0; y < 13; y++ ) 
 			{
-				JPanel p = new IPanel();
+				JPanel p = new MPanel(images);
 				mypanels[y][x] = p;
 				myframe.add(p);
 				p.setBounds(30+puyoSize*x,40+puyoSize*y,puyoSize,puyoSize); 
@@ -104,7 +170,7 @@ class puyo1
 		
 		for(y = 0; y < 2; y++)
 		{
-			JPanel p = new IPanel();
+			JPanel p = new MPanel(images);
 			nextpanel[y] = p;
 			myframe.add(p);
 			p.setBounds(30 + puyoSize*8 + 10,
@@ -412,8 +478,7 @@ class puyo1
 	static boolean moveLeft() 
 	{
 		int nx,ny,nr;
-		lock2 = true;
-		if(lock==false && (puyoX+puyoX2+puyoY+puyoY2!=0)) // "back from dead" bug fix 
+		lock2 = true; if(lock==false && (puyoX+puyoX2+puyoY+puyoY2!=0)) // "back from dead" bug fix 
 		{
 			if( (rotate == 1 || getpuyo(puyoX-1,puyoY) == 0)
 					&& (rotate == 3 || getpuyo(puyoX2-1,puyoY2) == 0) ) 
@@ -571,5 +636,53 @@ class puyo1
 			Thread.sleep(msec);
 		}catch(InterruptedException ie) {
 		}
+	}
+	static public void loadImages(String[][] imageFiles)
+	{
+		if( imageFiles.length < 1) return;
+		images = new Image[imageFiles.length][];
+		for(int i=0; i<imageFiles.length; i++)
+		{
+			images[i]= new Image[imageFiles[i].length];
+
+			for( int j = 0; j < imageFiles[i].length; j++){
+				images[i][j] = loadOneImage(imageFiles[i][j]);
+			}
+		}
+	}
+	static Image loadOneImage(String filename)
+	{
+		byte[] bin = loadBinaryData(filename);
+		if( bin == null ) {return null;}
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Image image = tk.createImage(bin);
+		tk.prepareImage(image,-1,-1,null);
+		return image;
+	}
+	static byte[] loadBinaryData(String filename)
+	{
+		byte[] bin = null;
+		try
+		{
+			final int bufsize = 1024;
+			BufferedInputStream bis = new BufferedInputStream( new FileInputStream(filename), bufsize);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			byte[] buf = new byte[bufsize];
+			int len;
+			while( (len = bis.read(buf,0,bufsize)) != -1)
+			{
+				bos.write(buf,0,len);
+			}
+			bos.flush();
+			bin = bos.toByteArray();
+			bos.close();
+			bis.close();
+		}
+		catch(IOException e)
+		{
+			System.err.print(e.toString());
+			return null;
+		}
+		return bin;
 	}
 }
