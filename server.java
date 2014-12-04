@@ -147,13 +147,14 @@ class server {
             if (packet.getAddress()!=null) {
                 for (int n = 0; n < buf.length; n++) System.out.print(buf[n]);
 
+                System.out.println();
+
                 for (int n = 1; n <= player; n++)
 
                     if (playersAddress[n] != packet.getAddress())
                         try {
                             socketUp.send(new DatagramPacket(buf, buf.length, playersAddress[n], CLIENTPORT));
-                        } catch (IOException e) {
-                        }
+                        } catch (IOException e) { }
             }
 
             if (buf[0] == 1 && buf[1] == 0) playerAlive[parseID(buf, 2, 5)] = 0;
