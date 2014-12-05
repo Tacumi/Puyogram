@@ -187,7 +187,7 @@ class puyo1
         scorepanel.setBounds(puyoSize*13,puyoSize*1,600,40);
 
         scoreLabel = new JLabel();
-        scorepanel.setBounds(0,0,80,40);
+        scoreLabel.setBounds(0,0,80,40);
         scoreLabel.setText("Score: 0");
 
         gameover = new JLabel();
