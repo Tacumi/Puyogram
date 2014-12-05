@@ -128,7 +128,8 @@ class puyo1
 
         myframe =  new JFrame();
         myframe.setLayout(null); // does not use layout manager
-        myframe.setSize(400,600); // window size : width = 400, height = 600
+        myframe.setSize(500,600);
+		myframe.setResizable(false);
 
         myframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -183,10 +184,10 @@ class puyo1
         }
 
         JPanel scorepanel = new JPanel();
-        scorepanel.setBounds(40,470,600,40);
+        scorepanel.setBounds(puyoSize*13,puyoSize*1,600,40);
 
         scoreLabel = new JLabel();
-        scorepanel.setBounds(0,470,60,40);
+        scorepanel.setBounds(0,0,80,40);
         scoreLabel.setText("Score: 0");
 
         gameover = new JLabel();
@@ -520,7 +521,7 @@ class puyo1
                         for ( int n = 0; n < buf.length ; n++ ) System.out.print(buf[n]);
                     } catch (IOException e) { }
 
-                    if (buf[0] == 0 && buf[1] == 0) playerlist[parseID(buf, 2, 5)].setText(parseID(buf, 2, 5) + ". " + parseID(buf, 6, 70));
+                    if (buf[0] == 0 && buf[1] == 0) playerlist[parseID(buf, 2, 5)].setText(parseID(buf, 2, 5) + ". " + parselongID(buf, 6, 70));
                 }
             }
         };
@@ -549,11 +550,20 @@ class puyo1
         for (idx = 0; idx < num; idx++ ) {
             playerlist[idx] = new JLabel();
             myframe.add(playerlist[idx]);
-            playerlist[idx].setBounds(300, 300+(idx*15), 60, 10);
+            playerlist[idx].setBounds(300, 300+(idx*15), 90, 10);
             playerlist[idx].setText(""+(idx+1));
         }
 
         myframe.repaint();
+    }
+    public static long parselongID(byte[] in, int start, int end) {
+        long res = 0;
+
+        for ( int n = start; n <= end; n++ ) {
+            res += (int)in[n]*Math.pow(2, n-start);
+        }
+
+        return res;
     }
     public static int parseID(byte[] in, int start, int end) {
         int res = 0;
@@ -564,6 +574,7 @@ class puyo1
 
         return res;
     }
+	
     static void setpuyo(int x, int y, int color)
     {
         puyomatrix[y][x] = color;
